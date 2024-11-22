@@ -1,7 +1,12 @@
+import { validateShipParams } from "./Utilities/ShipUtil";
 class Ship {
-  constructor(length) {
+  constructor(x, y, length, direction, rows, cols) {
+    validateShipParams(x, y, length, direction, rows, cols);
+    this.x = x;
+    this.y = y;
     this.length = length;
     this.hit = 0;
+    this.direction = direction;
   }
 
   recieveHit() {
