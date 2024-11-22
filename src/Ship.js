@@ -4,7 +4,7 @@ class Ship {
     this.hit = 0;
   }
 
-  hit() {
+  recieveHit() {
     if (this.isSunk()) throw Error("Ship is sunk!");
     this.hit += 1;
   }
@@ -14,4 +14,4 @@ class Ship {
   }
 }
 
-export {Ship};
+export { Ship };
