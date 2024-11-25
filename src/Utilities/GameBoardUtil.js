@@ -39,17 +39,28 @@ function isCellOccuppied(x, y, board, rows, cols) {
   return false;
 }
 
-function placeShipVertically(x, y, length, board) {
+function placeShipVertically(x, y, length, board, ship, map) {
   while (length--) {
     board[x][y] = "S";
+    map.set(buildKey(x, y), ship);
     x += 1;
   }
 }
-function placeShipHorizontally(x, y, length, board) {
+function placeShipHorizontally(x, y, length, board, ship, map) {
   while (length--) {
     board[x][y] = "S";
+    map.set(buildKey(x, y), ship);
     y += 1;
   }
+}
+
+function buildKey(x, y) {
+  return x.toString() + "," + y.toString();
+}
+
+function getValue(x, y, map) {
+  const key = buildKey(x, y);
+  return map.get(key);
 }
 
 export {
@@ -58,4 +69,6 @@ export {
   checkPathIsEmpty,
   placeShipHorizontally,
   placeShipVertically,
+  buildKey,
+  getValue,
 };

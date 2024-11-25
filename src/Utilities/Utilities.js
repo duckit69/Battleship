@@ -11,7 +11,17 @@ function isPositive(x) {
   return x >= 0;
 }
 function validateGivenCoordinates(x, y, rows, cols) {
-  if (y >= cols || y < 0 || x >= rows || x < 0) return false;
+  if (
+    !isNumber(x) ||
+    !isNumber(y) ||
+    !isWholeNumber(x) ||
+    !isWholeNumber(y) ||
+    y >= cols ||
+    y < 0 ||
+    x >= rows ||
+    x < 0
+  )
+    throw Error("Invalid coordinates");
   return true;
 }
 

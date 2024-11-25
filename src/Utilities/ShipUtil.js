@@ -7,11 +7,7 @@ import {
 
 function validateShipParams(x, y, length, direction, rows, cols) {
   // validate coordinates
-  if (!validateGivenCoordinates(x, y, rows, cols))
-    throw Error("Out of boundary");
-  if (!isNumber(x) || !isNumber(y)) throw Error("Invalid Ship coordinates");
-  if (!isWholeNumber(x) || !isWholeNumber(y))
-    throw Error("Invalid Ship coordinates ( Float coordinates )");
+  validateGivenCoordinates(x, y, rows, cols);
   // validate length
   if (!isNumber(length)) throw Error("Invalid Ship Length");
   if (!isStrictlyPositive(length))

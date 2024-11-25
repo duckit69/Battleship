@@ -1,4 +1,5 @@
 import { GameBoard } from "../src/GameBoard";
+import { Ship } from "../src/Ship";
 
 // Constructor
 test("check if gameBoard params are numbers", () => {
@@ -28,28 +29,28 @@ test("check if Ship is created from GameBoard", () => {
 test("check Ship Boundaries", () => {
   const gameBoard = new GameBoard(4, 4);
   expect(() => gameBoard.placeShip(4, 4, 2, "vertical")).toThrow(
-    "Out of boundary"
+    "Invalid coordinates"
   );
 });
 
 test("check if Ship has string as coordinates", () => {
   const gameBoard = new GameBoard(4, 4);
   expect(() => gameBoard.placeShip(2, "qwe", 2, "vertical")).toThrow(
-    "Invalid Ship coordinates"
+    "Invalid coordinates"
   );
 });
 
 test("check if Ship has whole number as coordinates", () => {
   const gameBoard = new GameBoard(4, 4);
   expect(() => gameBoard.placeShip(2, 2.1, 2, "vertical")).toThrow(
-    "Invalid Ship coordinates ( Float coordinates )"
+    "Invalid coordinates"
   );
 });
 
 test("check if given ship coordinates is inside Game Board", () => {
   const gameBoard = new GameBoard(4, 4);
   expect(() => gameBoard.placeShip(5, 5, 2, "vertical")).toThrow(
-    "Out of boundary"
+    "Invalid coordinates"
   );
 });
 
@@ -120,4 +121,89 @@ test("check if Ship overlap another ship (vertical test)", () => {
   expect(() => gameBoard.placeShip(0, 2, 4, "vertical")).toThrow(
     "A ship already exist in this path"
   );
+});
+
+// recieve attack function
+
+test("check recieve attack function input", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  expect(gameBoard.recieveAttack(1, 2)).toBeTruthy();
+});
+
+test("check recieve attack function input (string as input)", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  expect(() => gameBoard.recieveAttack("1", 2)).toThrow("Invalid coordinates");
+});
+
+test("check recieve attack function input (obj as input)", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  const obj = {
+    name: "name",
+  };
+  expect(() => gameBoard.recieveAttack(obj, 2)).toThrow("Invalid coordinates");
+});
+
+test("check recieve attack function input (out of boundaries)", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  expect(() => gameBoard.recieveAttack(5, 5)).toThrow("Invalid coordinates");
+});
+
+test("check our attack is registered", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  gameBoard.recieveAttack(0, 0);
+  expect(gameBoard.getCell(0, 0)).toBe("X");
+});
+test("check if we can attack the same cell again", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  gameBoard.recieveAttack(0, 0);
+  expect(() => gameBoard.recieveAttack(0, 0)).toThrow(
+    "You can not attack same cell twice"
+  );
+});
+
+test("check if ship register attack", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  gameBoard.recieveAttack(0, 0);
+  gameBoard.recieveAttack(1, 0);
+  expect(gameBoard.getShip(0, 0).isSunk()).toBeTruthy();
+});
+test("check if board track missedShots", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  gameBoard.recieveAttack(0, 0);
+  gameBoard.recieveAttack(1, 0);
+  expect(gameBoard.getMissedShots()).toBe(0);
+});
+test("check if board track missedShots", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.placeShip(4, 1, 2, "horizontal");
+  gameBoard.recieveAttack(0, 0);
+  gameBoard.recieveAttack(1, 0);
+  gameBoard.recieveAttack(2, 2);
+  gameBoard.recieveAttack(4, 2);
+  expect(gameBoard.getMissedShots()).toBe(1);
+});
+
+test("check if board track missedShots", () => {
+  const gameBoard = new GameBoard(5, 5);
+  gameBoard.placeShip(0, 0, 2, "vertical");
+  gameBoard.recieveAttack(0, 0);
+  gameBoard.recieveAttack(1, 0);
+  expect(gameBoard.recieveAttack(2, 2)).toBeTruthy();
 });
